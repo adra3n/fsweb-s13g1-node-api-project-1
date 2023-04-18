@@ -1,12 +1,14 @@
 // SUNUCUYU BU DOSYAYA KURUN
 
 const express = require('express')
+const cors = require('cors')
 
 const UsersModel = require('./users/model')
 
 const server = express()
 
 server.use(express.json())
+server.use(cors())
 
 server.post('/api/users', async (req, res) => {
   try {

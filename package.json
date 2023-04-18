@@ -21,6 +21,7 @@
     "url": "git+https://github.com/Workintech/fsweb-s13g1-node-api-project-1.git"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "nanoid": "^3.3.4"
   }
