@@ -7,7 +7,7 @@ const server = express()
 
 server.use(express.json())
 
-server.post('/api/users', async (res, req) => {
+server.post('/api/users', async (req, res) => {
   try {
     const payload = req.body
     if (!payload.name || !payload.bio) {
@@ -25,21 +25,19 @@ server.post('/api/users', async (res, req) => {
   }
 })
 
-server.get('/api/users', async (res, req) => {
+server.get('/api/users', async (req, res) => {
   try {
-    const payload = req.body
-    UsersModel.find()
+    const users = await UsersModel.find()
+    res.status(200).json(users)
   } catch (error) {
     res.status(500).json({ message: 'Kullanıcı bilgileri alınamadı' })
   }
-  const users = UsersModel.find()
-  res.status(200).json(users)
 })
 
-server.get('/api/users:id', async (res, req) => {
+server.get('/api/users/:id', async (req, res) => {
   try {
-    let id = req.params.id
-    let userById = await UsersModel.findById(id)
+    const id = req.params.id
+    const userById = await UsersModel.findById(id)
     if (!userById) {
       res.status(404).json({ message: "Belirtilen ID'li kullanıcı bulunamadı" })
     } else {
@@ -48,18 +46,16 @@ server.get('/api/users:id', async (res, req) => {
   } catch (error) {
     res.status(500).json({ message: 'Kullanıcı bilgisi alınamadı' })
   }
-  const users = UsersModel.find()
-  res.status(200).json(users)
 })
 
-server.delete(`/api/users/:id`, async (res, req) => {
+server.delete(`/api/users/:id`, async (req, res) => {
   try {
-    let id = req.params.id
-    let userById = await UsersModel.findById(id)
+    const id = req.params.id
+    const userById = await UsersModel.findById(id)
     if (!userById) {
       res.status(404).json({ message: 'Belirtilen ID li kullanıcı bulunamadı' })
     } else {
-      let deletedUser = await UsersModel.remove(id)
+      const deletedUser = await UsersModel.remove(id)
       res.json(deletedUser)
     }
   } catch (error) {
@@ -67,4 +63,4 @@ server.delete(`/api/users/:id`, async (res, req) => {
   }
 })
 
-module.exports = { server } // SERVERINIZI EXPORT EDİN {}
+module.exports = server // SERVERINIZI EXPORT EDİN {}
