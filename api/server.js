@@ -1,6 +1,7 @@
 // SUNUCUYU BU DOSYAYA KURUN
 
 const express = require('express')
+
 const UsersModel = require('./users/model')
 
 const server = express()
@@ -45,6 +46,28 @@ server.get('/api/users/:id', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: 'Kullanıcı bilgisi alınamadı' })
+  }
+})
+
+server.put('/api/users/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const userById = await UsersModel.findById(id)
+    if (!userById) {
+      res.status(404).json({ message: "Belirtilen ID'li kullanıcı bulunamadı" })
+    } else {
+      const user = req.body
+      if (!user.name || !user.bio) {
+        res
+          .status(400)
+          .json({ message: 'Lütfen kullanıcı için bir name ve bio sağlayın' })
+      } else {
+        const updated = await UsersModel.update(req.params.id, user)
+        res.json(updated)
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Kullanıcı bilgileri güncellenemedi' })
   }
 })
 
